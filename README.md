@@ -48,4 +48,4 @@ sudo docker-compose up -d --build
 
 
 ## ✒️ Autor
-* [**Frankilyn José Schveitzer**](https://github.com/frankilynjs)
+* [**Leonardo Della Giustina**](https://github.com/leonardodg)
