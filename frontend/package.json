@@ -1,0 +1,42 @@
+{
+  "name": "frontend-keycloak",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "config": {
+    "moveFilesJs": "src/js/script.js node_modules/bootstrap/dist/js/bootstrap.min.js node_modules/bootstrap/dist/js/bootstrap.min.js.map node_modules/keycloak-js/dist/keycloak.min.js node_modules/keycloak-js/dist/keycloak.min.js.map",
+    "moveFilesCss": "node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/bootstrap/dist/css/bootstrap.min.css.map"
+  },
+  "scripts": {
+    "new:dist": "mkdir dist && mkdir dist/js && mkdir dist/css && mkdir dist/img && chmod -R 777 dist",
+    "clean:dist": "rm -rf dist",
+    "move:index": "cp src/index.html dist/",
+    "move:img": "cp src/img/* dist/img",
+    "move:js": "cp $npm_package_config_moveFilesJs dist/js/",
+    "move:css": "cp $npm_package_config_moveFilesCss dist/css/",
+    "dotenv": "export DOTENV=$(grep = .env | cut -d = -f 1,2 .env | tr \"\\n\" \";\") && sed -i \"s|.DOTENV|${DOTENV}|\" dist/index.html",
+    "build": "npm run clean:dist && npm run new:dist && npm run move:img && npm run move:index && npm run move:css && npm run move:js && npm run dotenv",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leonardodg/keycloak.git"
+  },
+  "keywords": [
+    "php",
+    "keycloak"
+  ],
+  "author": "LeoDG",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leonardodg/keycloak/issues"
+  },
+  "homepage": "https://github.com/leonardodg/keycloak#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.0",
+    "keycloak-js": "^21.1.1"
+  }
+}

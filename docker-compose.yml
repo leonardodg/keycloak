@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  frontend:
+    container_name: "nginx_web"
+    build:
+      context: ./
+      dockerfile: ./docker/build/nginx.Dockerfile
+    ports:
+      - "8081:80"
+      - "8444:443"
+    volumes:
+     - ./frontend/:/usr/share/nginx/html
+     - ./docker/ssl:/etc/ssl
+
+  backend:
+    container_name: "apache_web"
+    build:
+      context: ./
+      dockerfile: ./docker/build/apache.Dockerfile
+    ports:
+      - "8082:80"
+    volumes:
+      - ./backend:/var/www/html:rw
+
+  keycloak:
+    container_name: "keycloak_web"
+    image: quay.io/keycloak/keycloak
+    command: start-dev
+    volumes:
+      - ./docker/ssl:/etc/x509/https
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_FRONTEND_HOSTNAME=app.keycloak.com
+      - KEYCLOAK_ADMIN_URL=https://app.keycloak.com:8443/
+
+      - KEYCLOAK_HTTP_PORT=8080
+      - KEYCLOAK_HTTPS_PORT=8443
+      - KEYCLOAK_HOSTNAME=app.keycloak.com
+
+      - KC_DB=mysql
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=admin
+      - KC_DB_URL_HOST=keycloak_db
+      - KC_DB_URL_PORT=3306
+      - KC_DB_SCHEMA=keycloak
+
+      - KC_HTTPS_CERTIFICATE_FILE=/etc/x509/https/app.keycloak.com.crt
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/etc/x509/https/app.keycloak.com.key
+    links:
+      - keycloak_db
+    depends_on:
+      - keycloak_db
+
+  keycloak_db:
+    container_name: "keycloak_db"
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    ports:
+      - "3360:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    volumes:
+      - "v_keycloak_db:/var/lib/mysql:rw"
+
+volumes:
+  v_keycloak_db:
