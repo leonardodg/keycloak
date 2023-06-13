@@ -14,14 +14,29 @@ services:
      - ./docker/ssl:/etc/ssl
 
   backend:
-    container_name: "apache_web"
-    build:
+    container_name: "${CTNR_NAME}"
+    restart: always
+    build: 
       context: ./
       dockerfile: ./docker/build/apache.Dockerfile
+      args:
+       URL: ${URL}
+       URL_ALIAS: ${URL_ALIAS}
+       PATH_CTNR_CERTS: ${PATH_CTNR_CERTS}
+       PATH_HOST_CERTS: ${PATH_HOST_CERTS}
+       PATH_CTNR_WWW: ${PATH_CTNR_WWW}
+       PATH_HOST_WWW: ${PATH_HOST_WWW}
+    env_file:
+      - .env
     ports:
-      - "8082:80"
+      - '${WWW_HOST_PORT}:${WWW_CTNR_PORT}'
+      - '${SSL_HOST_PORT}:${SSL_CTNR_PORT}'
+    links:
+      - keycloak
     volumes:
-      - ./backend:/var/www/html:rw
+      - '${PATH_HOST_WWW}:${PATH_CTNR_WWW}:rw'
+      - '${PATH_HOST_CERTS}:${PATH_CTNR_CERTS}:rw'
+      - ./docker/apache/logs:/var/log/apache2:rw
 
   keycloak:
     container_name: "keycloak_web"

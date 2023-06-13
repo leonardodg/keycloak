@@ -1,5 +1,11 @@
-.vscode
 .git
+.vscode
+backend/cache
+backend/composer.lock
+backend/vendor
+backend/public/img
+backend/public/css
+docker/apache/logs
 frontend/package-lock.json
 frontend/node_modules
 frontend/dist
