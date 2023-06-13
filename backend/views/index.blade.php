@@ -11,6 +11,6 @@
 
     <br>
 
-    {{  asset('img/photo.jpg') }}
+    <?= phpinfo() ?>
 </body>
 </html>
