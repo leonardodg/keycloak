@@ -1,10 +1,8 @@
 .git
 .vscode
 backend/cache
-backend/composer.lock
 backend/vendor
-backend/public/img
-backend/public/css
+backend/dist
 docker/apache/logs
 frontend/package-lock.json
 frontend/node_modules

@@ -7,16 +7,6 @@ class LoginController
 {
     public function connect()
     {
-        // echo "Keycloak Connect!".$_ENV['KEYCLOAK_URL'];
-
-        // echo $_ENV['URL']; die;
-        // echo $_ENV['KEYCLOAK_URL']; die;
-
-        // echo '<br> <pre> ';
-
-        // echo ' <br>oauth2state: ';
-        // var_dump($_SESSION['oauth2state']);
-
         $provider = new \keycloak\App\Provider\Keycloak([
             'authServerUrl'         => $_ENV['KEYCLOAK_URL'],
             'realm'                 => $_ENV['KEYCLOAK_REALM'],
@@ -42,23 +32,11 @@ class LoginController
         
         } else {
 
-            // echo '<br> CODE: ';
-            // echo  $_GET['code'];
-
             // Try to get an access token (using the authorization coe grant)
             try {
                 $token = $provider->getAccessToken('authorization_code', [
                     'code' => $_GET['code']
                 ]);
-
-                // echo '<br> TOKEN: ';
-                // echo $token;
-                // echo '<br>';
-                
-                echo '<br> <pre> ';
-                // echo '<br> vardump: ';
-                 var_dump($token);
-                // echo '<br>';
                 
             } catch (Exception $e) {
                 exit('Failed to get access token: '.$e->getMessage());

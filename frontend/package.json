@@ -11,13 +11,13 @@
     "moveFilesCss": "node_modules/bootstrap/dist/css/bootstrap.min.css node_modules/bootstrap/dist/css/bootstrap.min.css.map"
   },
   "scripts": {
-    "new:dist": "mkdir dist && mkdir dist/js && mkdir dist/css && mkdir dist/img && chmod -R 777 dist",
-    "clean:dist": "rm -rf dist",
+    "new:dist": "mkdir dist/js && mkdir dist/css && mkdir dist/img && chmod -R 777 dist",
+    "clean:dist": "rm -rf dist/js && rm -rf dist/css && rm -rf dist/img",
     "move:index": "cp src/index.html dist/",
     "move:img": "cp src/img/* dist/img",
     "move:js": "cp $npm_package_config_moveFilesJs dist/js/",
     "move:css": "cp $npm_package_config_moveFilesCss dist/css/",
-    "dotenv": "export DOTENV=$(grep = .env | cut -d = -f 1,2 .env | tr \"\\n\" \";\") && sed -i \"s|.DOTENV|${DOTENV}|\" dist/index.html",
+    "dotenv": "export DOTENV=$(grep = .env | cut -d = -f 1,2 .env | tr \"\\n\" \";\" | tr -d \"\\t\\r\") && sed -i \"s|.DOTENV|${DOTENV}|\" dist/index.html",
     "build": "npm run clean:dist && npm run new:dist && npm run move:img && npm run move:index && npm run move:css && npm run move:js && npm run dotenv",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
