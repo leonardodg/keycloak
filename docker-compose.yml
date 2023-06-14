@@ -11,17 +11,35 @@ services:
       - "8444:443"
     volumes:
      - ./frontend/:/usr/share/nginx/html
-     - ./docker/ssl:/etc/ssl
+     - v_frontend_node_modules:/usr/share/nginx/html/node_modules
+     - v_frontend_dist:/usr/share/nginx/html/dist
 
   backend:
-    container_name: "apache_web"
-    build:
+    container_name: "${CTNR_NAME}"
+    restart: always
+    build: 
       context: ./
       dockerfile: ./docker/build/apache.Dockerfile
+      args:
+       URL: ${URL}
+       URL_ALIAS: ${URL_ALIAS}
+       PATH_CTNR_CERTS: ${PATH_CTNR_CERTS}
+       PATH_HOST_CERTS: ${PATH_HOST_CERTS}
+       PATH_CTNR_WWW: ${PATH_CTNR_WWW}
+       PATH_HOST_WWW: ${PATH_HOST_WWW}
+    env_file:
+      - .env
     ports:
-      - "8082:80"
+      - '${WWW_HOST_PORT}:${WWW_CTNR_PORT}'
+      - '${SSL_HOST_PORT}:${SSL_CTNR_PORT}'
+    links:
+      - keycloak
     volumes:
-      - ./backend:/var/www/html:rw
+      - '${PATH_HOST_WWW}:${PATH_CTNR_WWW}:rw'
+      - '${PATH_HOST_CERTS}:${PATH_CTNR_CERTS}:rw'
+      - ./docker/apache/logs:/var/log/apache2:rw
+      - v_backend_vendor:/var/www/html/vendor
+      - v_backend_dist:/var/www/html/dist
 
   keycloak:
     container_name: "keycloak_web"
@@ -73,3 +91,7 @@ services:
 
 volumes:
   v_keycloak_db:
+  v_backend_vendor:
+  v_backend_dist:
+  v_frontend_node_modules:
+  v_frontend_dist:

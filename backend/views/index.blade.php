@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title> Demo FrontEnd Example - Keycloak </title>
+        <title>INDEX - Keycloak PHP</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/styles.css" rel="stylesheet">
         <link rel="shortcut icon" href="img/favicon.ico">
         <script src="js/keycloak.min.js"></script>
     </head>
@@ -36,7 +37,7 @@
         <div class="container text-center">
             <div class="row justify-content-lg-center">
                 <div class="col-lg-auto">
-                    <h1 class="fw-bolder"> FrontEnd Keycloak </h1>
+                    <h1 class="fw-bolder">Page INDEX - Run Blade PHP</h1>
                 </div>
             </div>
         </div>
@@ -63,36 +64,6 @@
             <div class="col-8">
 
               <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0"> 
-                  
-                  <div class="card">
-                    <div class="card-header">
-                      Configurações 
-                    </div>
-
-                    <div class="card-body">
-                      <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">URL</span>
-                        <input name="KEYCLOAK_URL" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="http://mn01l:8080/" >
-                      </div>
-
-                      <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Realm</span>
-                        <input name="KEYCLOAK_REALM" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="education" >
-                      </div>
-
-                      <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">ClientID</span>
-                        <input name="KEYCLOAK_CLIENTID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="app-frontend" >
-                      </div>
-                    </div>
-
-                    <div class="mb-3">
-                      <button type="submit" class="btn btn-primary" onclick="salve()" >Salve</button>
-                      <button type="cancel" class="btn btn-secondary" onclick="resetenv()" >Reset</button>
-                    </div>
-                  </div> 
-                </div>
                 <div class="tab-pane fade" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab" tabindex="0"> 
                   <div class="container text-start">
                             <div class="card">
@@ -160,23 +131,6 @@
             </div>
           </div>
       </div>
-
-      <br>
-
-      <div class="container text-center">
-        <div class="row justify-content-md-center">
-          <div class="col-md-auto">
-            <div class="card border-primary mb-6">
-              <div class="card-header text-primary"> LOG - EVENTOS </div>
-              <div id="card-logs" class="card-body ">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <br>
-
     </body>
 
     <script src="js/bootstrap.min.js"></script>

@@ -1,0 +1,42 @@
+{
+    "name": "src/app",
+    "description": "Keycloak OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "keycloak\\App\\": "src/"
+        }
+    },
+    "scripts": {
+        "move:public": "cp -R public/.htaccess public/* dist/",
+        "move:js": "cp -R vendor/twbs/bootstrap/dist/js/bootstrap.min.js vendor/twbs/bootstrap/dist/js/bootstrap.min.js.map dist/js/",
+        "move:css": "cp -R vendor/twbs/bootstrap/dist/css/bootstrap.min.css vendor/twbs/bootstrap/dist/css/bootstrap.min.css.map dist/css/",
+        "build": "composer run-script move:public && composer run-script move:js && composer run-script move:css"
+    },
+    "keywords": [
+        "oauth",
+        "oauth2",
+        "PHP",
+        "authorization",
+        "authorisation",
+        "keycloak"
+    ],
+    "authors": [
+        {
+            "name": "Leonardo Della Gistina",
+            "email": "leonardodg@msn.com"
+        }
+    ],
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "require": {
+        "bramus/router": "^1.6",
+        "firebase/php-jwt": "^6.5",
+        "league/oauth2-client": "^2.7",
+        "psr/http-message": "^1.1",
+        "vlucas/phpdotenv": "^5.5",
+        "jenssegers/blade": "^1.4",
+        "twbs/bootstrap": "5.3.0"
+    }
+}
