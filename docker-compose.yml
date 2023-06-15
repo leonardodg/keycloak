@@ -20,13 +20,6 @@ services:
     build: 
       context: ./
       dockerfile: ./docker/build/apache.Dockerfile
-      args:
-       URL: ${URL}
-       URL_ALIAS: ${URL_ALIAS}
-       PATH_CTNR_CERTS: ${PATH_CTNR_CERTS}
-       PATH_HOST_CERTS: ${PATH_HOST_CERTS}
-       PATH_CTNR_WWW: ${PATH_CTNR_WWW}
-       PATH_HOST_WWW: ${PATH_HOST_WWW}
     env_file:
       - .env
     ports:
