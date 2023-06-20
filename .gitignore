@@ -1,6 +1,7 @@
 .git
 .vscode
 backend/cache
+backend/composer.lock
 backend/vendor
 backend/dist
 docker/apache/logs

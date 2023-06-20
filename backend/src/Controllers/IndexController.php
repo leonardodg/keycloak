@@ -13,7 +13,8 @@ class IndexController
         $this->blade = new Blade(ROOT_PATH.'/views', ROOT_PATH.'/cache');
     }
 
-    public function render(){
+    public function render()
+    {
         echo $this->blade->render('index');
     }
 }

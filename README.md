@@ -74,14 +74,22 @@ docker cp docker/apache/ips-copy-hosts apache_web:/etc/ips-copy-hosts
 docker exec -u root apache_web bash -c "cat /etc/ips-copy-hosts >> /etc/hosts"
 ```
 
+<<<<<<< HEAD
 
 #### FRONTEND
+=======
+#### RUN BUILD FRONTEND
+>>>>>>> develop
 Run build folder src
 ```
 npm run build
 ```
 
+<<<<<<< HEAD
 #### BACKEND
+=======
+#### RUN BUILD BACKEND
+>>>>>>> develop
 Run build folder public
 ```
 composer run-script build

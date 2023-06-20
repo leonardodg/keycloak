@@ -13,19 +13,13 @@
 
     <body>
 
-        <input name="dotenv" type="hidden" value=".DOTENV" >
-
         <nav class="navbar bg-dark navbar-expand-lg border-bottom border-bottom-dark" data-bs-theme="dark">
             <div class="container-fluid">
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 
-                <div class="nav navbar-nav" id="nav-tab" role="tablist">
-                  <a class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Home</a>
-                  <a class="nav-link" id="nav-login-tab" data-bs-toggle="tab" data-bs-target="#nav-login" type="button" role="tab" aria-controls="nav-login" aria-selected="false" onclick="login()">Login</a>
-                  <a class="nav-link" id="nav-idtoken-tab" data-bs-toggle="tab" data-bs-target="#nav-idtoken" type="button" role="tab" aria-controls="nav-idtoken" aria-selected="false" onclick="output('id-token')">idToken</a>
-                  <a class="nav-link" id="nav-token-tab" data-bs-toggle="tab" data-bs-target="#nav-token" type="button" role="tab" aria-controls="nav-token" aria-selected="false" onclick="output('token')">Token</a>
-                  <a class="nav-link" id="nav-refresh-tab" data-bs-toggle="tab" data-bs-target="#nav-refresh" type="button" role="tab" aria-controls="nav-refresh" aria-selected="false" onclick="output('refresh-token')">refreshToken</a>
-                  <a class="nav-link" id="nav-logout-tab" data-bs-toggle="tab" data-bs-target="#nav-logout" type="button" role="tab" aria-controls="nav-logout" aria-selected="false" onclick="logout()">Logout</a>
+                <div class="nav navbar-nav" id="nav-tab" >
+                  <a class="nav-link active" type="button" href="/" >Home</a>
+                  <a href="/connect" class="nav-link" type="button" >Login</a>
                 </div>
 
               </div>
@@ -37,7 +31,7 @@
         <div class="container text-center">
             <div class="row justify-content-lg-center">
                 <div class="col-lg-auto">
-                    <h1 class="fw-bolder">Page INDEX - Run Blade PHP</h1>
+                    <h1 class="fw-bolder">Backend - Keycloak in PHP</h1>
                 </div>
             </div>
         </div>
@@ -46,22 +40,8 @@
 
         <div class="container text-center">
           <div class="row">
-            <div class="col-4">
-              
-              <div id="card-login" class="card" style="width: 18rem;">
-                <img src="img/user.png" class="card-img-top" alt="user">
-                <div class="card-body">
-                  <h5 class="card-title">User Logged</h5>
-                  <p class="card-text">
-                     Nome: <strong id="username"></strong> <br>
-                     E-mail: <strong id="mail"></strong> <br>
-                     UID: <strong id="uid"></strong>
-                  </p>
-                </div>
-              </div>
 
-            </div>
-            <div class="col-8">
+            <div class="col-auto-8">
 
               <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab" tabindex="0"> 

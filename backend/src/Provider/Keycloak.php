@@ -5,6 +5,7 @@ namespace keycloak\App\Provider;
 use Exception;
 use UnexpectedValueException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
@@ -105,7 +106,7 @@ class Keycloak extends AbstractProvider
             );
         }
 
-        exit ('The given response may be encrypted and sufficient '.
+        exit('The given response may be encrypted and sufficient '.
             'encryption configuration has not been provided.');
     }
 
@@ -263,7 +264,6 @@ class Keycloak extends AbstractProvider
     public function getResourceOwner(AccessToken $token)
     {
 
-        
         $response = $this->fetchResourceOwnerDetails($token);
 
         // We are always getting an array. We have to check if it is
@@ -275,6 +275,25 @@ class Keycloak extends AbstractProvider
         $response = $this->decryptResponse($response);
 
         return $this->createResourceOwner($response, $token);
+    }
+
+    /**
+     * Requests and returns the resource owner of given access token.
+     *
+     * @param  AccessToken $token
+     * @return string|array|null $response
+     */
+    public function getJWTDecode($jwt)
+    {
+
+        $exploded = explode('.', $jwt);
+        return (base64_decode(str_pad(
+            strtr($exploded[1], '-_', '+/'),
+            strlen($exploded[1]) % 4,
+            '=',
+            STR_PAD_RIGHT
+        )));
+
     }
 
     /**
@@ -324,13 +343,13 @@ class Keycloak extends AbstractProvider
         return $this;
     }
 
-     /**
-      * Updates the keycloak version.
-      *
-      * @param string  $version
-      *
-      * @return Keycloak
-      */
+    /**
+     * Updates the keycloak version.
+     *
+     * @param string  $version
+     *
+     * @return Keycloak
+     */
     public function setVersion($version)
     {
         $this->version = $version;
