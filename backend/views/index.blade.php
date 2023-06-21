@@ -19,7 +19,13 @@
                 
                 <div class="nav navbar-nav" id="nav-tab" >
                   <a class="nav-link active" type="button" href="/" >Home</a>
-                  <a href="/connect" class="nav-link" type="button" >Login</a>
+
+                  @if ($logged)
+                    <a href="/admin" class="nav-link" type="button" >Admin</a>
+                  @else
+                    <a href="/connect" class="nav-link" type="button" >Login</a>
+                  @endif
+
                 </div>
 
               </div>
@@ -39,78 +45,33 @@
         <br>
 
         <div class="container text-center">
-          <div class="row">
-
-            <div class="col-auto-8">
-
-              <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab" tabindex="0"> 
-                  <div class="container text-start">
-                            <div class="card">
-                              <div class="card-header">
-                                TOKEN
-                              </div>
-                              <div class="card-body">
-                                <blockquote class="blockquote">
-                                  <p id="token-base64" class="card-text"></p>
-                                  <hr>
-                                  <pre> 
-                                    <code>
-                                      <p id="token-json" class="card-text"></p>
-                                    </code>
-                                  </pre>
-                                </blockquote>
-                          </div>
-                      </div>
+          <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+              <div class="card">
+                <div class="card-header">
+                  Configurações 
+                </div>
+      
+                <div class="card-body">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">URL</span>
+                    <input name="KEYCLOAK_URL" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{ $url }}" disabled >
+                  </div>
+      
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Realm</span>
+                    <input name="KEYCLOAK_REALM" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{ $realm }}" disabled >
+                  </div>
+      
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-default">ClientID</span>
+                    <input name="KEYCLOAK_CLIENTID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="{{ $client_id }}" disabled >
                   </div>
                 </div>
-
-                <div class="tab-pane fade" id="nav-idtoken" role="tabpanel" aria-labelledby="nav-idtoken-tab" tabindex="0"> 
-                    <div class="container text-start">
-                              <div class="card">
-                                <div class="card-header">
-                                  ID TOKEN
-                                </div>
-                                <div class="card-body">
-                                  <blockquote class="blockquote">
-                                    <p id="idtoken-base64" class="card-text"></p>
-                                    <hr>
-                                    <pre>
-                                      <code>
-                                      <p id="idtoken-json" class="card-text">  </p>
-                                      </code>
-                                    </pre>
-                                  </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-pane fade" id="nav-refresh" role="tabpanel" aria-labelledby="nav-refresh-tab" tabindex="0"> 
-                    <div class="container text-start">
-                              <div class="card">
-                                <div class="card-header">
-                                  REFRESH TOKEN
-                                </div>
-                                <div class="card-body">
-                                  <blockquote class="blockquote">
-                                    <p id="refresh-base64" class="card-text"></p>
-                                    <hr>
-                                    <pre> 
-                                      <code>
-                                      <p id="refresh-json" class="card-text"></p>
-                                      </code>
-                                    </pre>
-                                  </blockquote>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
               </div>
             </div>
           </div>
-      </div>
+        </div>
     </body>
 
     <script src="js/bootstrap.min.js"></script>

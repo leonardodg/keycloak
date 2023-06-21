@@ -64,13 +64,13 @@ class AuthController
             header('location: /connect');
             exit();
         }
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
@@ -87,13 +87,14 @@ class AuthController
         }
 
         $options = [];
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
         $version = $_ENV['KEYCLOAK_VERSION'];
         unset($_SESSION['token']);
 
-        if (isset($version) && version_compare($version, '18.0.0', '>=')) {
-            $options['access_token'] = $token->access_token;
-        }
+        // test in version '18.0.0'
+        // if (isset($version) && version_compare($version, '18.0.0', '>=')) {
+        //     $options['access_token'] = $accessToken->getToken();
+        // }
 
         $url = $this->provider->getLogoutUrl($options);
 
@@ -109,19 +110,19 @@ class AuthController
             exit();
         }
 
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
         }
 
-        $json = $token->jsonSerialize();
+        $json = $accessToken->jsonSerialize();
         $result =  $this->provider->getJWTDecode($json['id_token']);
 
         $data = [
@@ -140,19 +141,19 @@ class AuthController
             exit();
         }
 
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
         }
 
-        $json = $token->jsonSerialize();
+        $json = $accessToken->jsonSerialize();
         $result =  $this->provider->getJWTDecode($json['access_token']);
 
         $data = [
@@ -171,19 +172,19 @@ class AuthController
             exit();
         }
 
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
         }
 
-        $json = $token->jsonSerialize();
+        $json = $accessToken->jsonSerialize();
         $result =  $this->provider->getJWTDecode($json['refresh_token']);
 
         $data = [

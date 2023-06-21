@@ -15,6 +15,18 @@ class IndexController
 
     public function render()
     {
-        echo $this->blade->render('index');
+        $data = [
+            'url' => $_ENV['KEYCLOAK_URL'] ?? "http://mn01l:8080/",
+            'realm' => $_ENV['KEYCLOAK_REALM'] ?? "education" ,
+            'client_id' => $_ENV['KEYCLOAK_CLIENT_ID'] ?? "app-backend-default"
+        ];
+
+        if (isset($_SESSION['token'])) {
+            $data['logged'] = true;
+        } else {
+            $data['logged'] = false;
+        }
+
+        echo $this->blade->render('index', $data);
     }
 }
