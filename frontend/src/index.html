@@ -24,6 +24,7 @@
                   <a class="nav-link" id="nav-idtoken-tab" data-bs-toggle="tab" data-bs-target="#nav-idtoken" type="button" role="tab" aria-controls="nav-idtoken" aria-selected="false" onclick="output('id-token')">idToken</a>
                   <a class="nav-link" id="nav-token-tab" data-bs-toggle="tab" data-bs-target="#nav-token" type="button" role="tab" aria-controls="nav-token" aria-selected="false" onclick="output('token')">Token</a>
                   <a class="nav-link" id="nav-refresh-tab" data-bs-toggle="tab" data-bs-target="#nav-refresh" type="button" role="tab" aria-controls="nav-refresh" aria-selected="false" onclick="output('refresh-token')">refreshToken</a>
+                  <a class="nav-link" id="nav-send-tab" data-bs-toggle="tab" data-bs-target="#nav-send" type="button" role="tab" aria-controls="nav-send" aria-selected="false" onclick="send()">sendToken</a>
                   <a class="nav-link" id="nav-logout-tab" data-bs-toggle="tab" data-bs-target="#nav-logout" type="button" role="tab" aria-controls="nav-logout" aria-selected="false" onclick="logout()">Logout</a>
                 </div>
 
@@ -63,6 +64,7 @@
             <div class="col-8">
 
               <div class="tab-content" id="nav-tabContent">
+
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0"> 
                   
                   <div class="card">
@@ -71,9 +73,15 @@
                     </div>
 
                     <div class="card-body">
+
                       <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">URL</span>
-                        <input name="KEYCLOAK_URL" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="http://mn01l:8080/" >
+                        <input name="BACKEND_URL" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="http://localhost:8088/" >
+                      </div>
+
+                      <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">URL</span>
+                        <input name="KEYCLOAK_URL" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" value="http://localhost:8080/" >
                       </div>
 
                       <div class="input-group mb-3">
@@ -93,6 +101,7 @@
                     </div>
                   </div> 
                 </div>
+
                 <div class="tab-pane fade" id="nav-token" role="tabpanel" aria-labelledby="nav-token-tab" tabindex="0"> 
                   <div class="container text-start">
                             <div class="card">
@@ -154,6 +163,27 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="tab-pane fade" id="nav-send" role="tabpanel" aria-labelledby="nav-send-tab" tabindex="0"> 
+                  <div class="container text-start">
+                            <div class="card">
+                              <div class="card-header">
+                                SEND TOKEN
+                              </div>
+                              <div class="card-body">
+                                <blockquote class="blockquote">
+                                  <p id="send-base64" class="card-text"></p>
+                                  <hr>
+                                  <pre> 
+                                    <code>
+                                    <p id="send-json" class="card-text"></p>
+                                    </code>
+                                  </pre>
+                                </blockquote>
+                          </div>
+                      </div>
+                  </div>
                 </div>
 
               </div>

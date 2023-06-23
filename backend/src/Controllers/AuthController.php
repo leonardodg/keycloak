@@ -3,7 +3,10 @@
 namespace keycloak\App\Controllers;
 
 use Jenssegers\Blade\Blade;
+use GuzzleHttp\Client as Client;
+use GuzzleHttp\Psr7\Request as Request;
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 
 class AuthController
 {
@@ -64,13 +67,13 @@ class AuthController
             header('location: /connect');
             exit();
         }
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
@@ -87,13 +90,14 @@ class AuthController
         }
 
         $options = [];
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
         $version = $_ENV['KEYCLOAK_VERSION'];
         unset($_SESSION['token']);
 
-        if (isset($version) && version_compare($version, '18.0.0', '>=')) {
-            $options['access_token'] = $token->access_token;
-        }
+        // test in version '18.0.0'
+        // if (isset($version) && version_compare($version, '18.0.0', '>=')) {
+        //     $options['access_token'] = $accessToken->getToken();
+        // }
 
         $url = $this->provider->getLogoutUrl($options);
 
@@ -109,19 +113,19 @@ class AuthController
             exit();
         }
 
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
         }
 
-        $json = $token->jsonSerialize();
+        $json = $accessToken->jsonSerialize();
         $result =  $this->provider->getJWTDecode($json['id_token']);
 
         $data = [
@@ -140,19 +144,19 @@ class AuthController
             exit();
         }
 
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
         }
 
-        $json = $token->jsonSerialize();
+        $json = $accessToken->jsonSerialize();
         $result =  $this->provider->getJWTDecode($json['access_token']);
 
         $data = [
@@ -171,19 +175,19 @@ class AuthController
             exit();
         }
 
-        $token = $_SESSION['token'];
+        $accessToken = $_SESSION['token'];
 
         // Optional: Now you have a token you can look up a users profile data
         try {
 
             // We got an access token, let's now get the user's details
-            $user = $this->provider->getResourceOwner($token);
+            $user = $this->provider->getResourceOwner($accessToken);
 
         } catch (Exception $e) {
             exit('Failed to get resource owner: '.$e->getMessage());
         }
 
-        $json = $token->jsonSerialize();
+        $json = $accessToken->jsonSerialize();
         $result =  $this->provider->getJWTDecode($json['refresh_token']);
 
         $data = [
@@ -193,5 +197,66 @@ class AuthController
                 ];
 
         echo $this->view->render('contents', $data);
+    }
+
+    public function checkToken()
+    {
+        // SET header RESPONSE - Enable CORS Browser
+        header('Content-Type: application/json; charset=utf-8');
+        header("Access-Control-Allow-Origin: {$_ENV['FRONTEND_URL']}");
+        header("Access-Control-Allow-Headers: Credentials, X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding");
+
+        $return = [ "success" => true ];
+        $url = "/realms/{$_ENV['KEYCLOAK_REALM']}/protocol/openid-connect/userinfo";
+
+        $client = new Client([
+            'base_uri' => $_ENV['KEYCLOAK_URL'],
+            'verify' => false
+        ]);
+
+        // Receive JSON POST with PHP
+        $json = json_decode(file_get_contents('php://input'), true);
+
+        $accessToken = $json['token'];
+        $return['token'] = $accessToken;
+
+        $request = new Request(
+            'GET',
+            $url,
+            [
+                'Authorization' => "Bearer {$accessToken}"
+            ]
+        );
+
+        // Send an asynchronous request.
+        $promise = $client->sendAsync($request)
+                        ->then(
+                            // success
+                            function (ResponseInterface $response) {
+                                // Psr7 Request
+                                return $response;
+                            },
+                            // failure callback
+                            function (Exception $e) {
+                                throw new Exception(sprintf(
+                                    " Failure Callback Response Http userinfo (%d): %s",
+                                    $e->getCode(),
+                                    $e->getMessage()
+                                ), $e->getCode());
+                            }
+                        );
+
+        try {
+            // Force return
+            $response = $promise->wait();
+            $return['user'] = json_decode($response->getBody()->getContents(), true);
+        } catch (Exception $e) {
+            $return = [ 'success' => false, 'error' => 'Exception: '.$e->getMessage(), 'code' => $e->getCode()];
+            echo json_encode($return);
+            exit;
+        }
+
+        echo json_encode($return);
+        exit;
     }
 }

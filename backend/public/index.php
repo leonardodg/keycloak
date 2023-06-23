@@ -18,6 +18,7 @@ $app->get('/admin', 'AuthController@admin');
 $app->get('/id-token', 'AuthController@idToken');
 $app->get('/access-token', 'AuthController@accessToken');
 $app->get('/refresh-token', 'AuthController@refreshToken');
+$app->match('POST|OPTIONS', '/check-token', 'AuthController@checkToken');
 $app->get('/logout', 'AuthController@logout');
 
 // Run it!
