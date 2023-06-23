@@ -123,15 +123,13 @@ function send(){
     body: JSON.stringify({ token: keycloak.token })
   }).then(function (response) {
 
-      if(response.ok)
-      {
+      if(response.ok) {
         eleTextBase.innerHTML = 'Request Success';
         events(">> Send Token: Request Success", "text-success");
-      }
-      else
-      {
-        eleTextBase.innerHTML = 'Request Failed';
+      } else {
         events(">> Send Token: Request Failed", "text-danger");
+        eleTextBase.innerHTML = 'Request Failed';
+        return 'Request Failed';
       }
 
       return response.json();
@@ -140,6 +138,13 @@ function send(){
       console.log(json);
 
       if (typeof json === 'object') {
+
+        if(json.success) {
+          events(">> Send Token: Return Success", "text-success");
+        } else {
+          events(">> Send Token: Return Failed", "text-danger");
+        }
+
         json = JSON.stringify(json, null, '  ');
       }
 
