@@ -3,7 +3,10 @@
 namespace keycloak\App\Controllers;
 
 use Jenssegers\Blade\Blade;
+use GuzzleHttp\Client as Client;
+use GuzzleHttp\Psr7\Request as Request;
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 
 class AuthController
 {
@@ -194,5 +197,66 @@ class AuthController
                 ];
 
         echo $this->view->render('contents', $data);
+    }
+
+    public function checkToken()
+    {
+        // SET header RESPONSE - Enable CORS Browser
+        header('Content-Type: application/json; charset=utf-8');
+        header("Access-Control-Allow-Origin: {$_ENV['FRONTEND_URL']}");
+        header("Access-Control-Allow-Headers: Credentials, X-Requested-With, Content-Type, Origin, Cache-Control, Pragma, Authorization, Accept, Accept-Encoding");
+
+        $return = [ "success" => true ];
+        $url = "/realms/{$_ENV['KEYCLOAK_REALM']}/protocol/openid-connect/userinfo";
+
+        $client = new Client([
+            'base_uri' => $_ENV['KEYCLOAK_URL'],
+            'verify' => false
+        ]);
+
+        // Receive JSON POST with PHP
+        $json = json_decode(file_get_contents('php://input'), true);
+
+        $accessToken = $json['token'];
+        $return['token'] = $accessToken;
+
+        $request = new Request(
+            'GET',
+            $url,
+            [
+                'Authorization' => "Bearer {$accessToken}"
+            ]
+        );
+
+        // Send an asynchronous request.
+        $promise = $client->sendAsync($request)
+                        ->then(
+                            // success
+                            function (ResponseInterface $response) {
+                                // Psr7 Request
+                                return $response;
+                            },
+                            // failure callback
+                            function (Exception $e) {
+                                throw new Exception(sprintf(
+                                    " Failure Callback Response Http userinfo (%d): %s",
+                                    $e->getCode(),
+                                    $e->getMessage()
+                                ), $e->getCode());
+                            }
+                        );
+
+        try {
+            // Force return
+            $response = $promise->wait();
+            $return['user'] = json_decode($response->getBody()->getContents(), true);
+        } catch (Exception $e) {
+            $return = [ 'success' => false, 'error' => 'Exception: '.$e->getMessage(), 'code' => $e->getCode()];
+            echo json_encode($return);
+            exit;
+        }
+
+        echo json_encode($return);
+        exit;
     }
 }

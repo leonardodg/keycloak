@@ -6,6 +6,7 @@ var eleButLogin = document.getElementById('nav-login-tab');
 var eleButToken = document.getElementById('nav-token-tab');
 var eleButIdToken = document.getElementById('nav-idtoken-tab');
 var eleButRefresh = document.getElementById('nav-refresh-tab');
+var eleButSend = document.getElementById('nav-send-tab');
 var eleButLogout = document.getElementById('nav-logout-tab');
 
 var dotenv = document.getElementsByName('dotenv')[0].value;
@@ -19,6 +20,7 @@ eleCardLogin.style.display = "none";
 eleButToken.style.display = "none";
 eleButIdToken.style.display = "none";
 eleButRefresh.style.display = "none";
+eleButSend.style.display = "none";
 eleButLogout.style.display = "none";
 
 // CONVERT STRING TO ARRAY OBJECT VARIABLES IN ENVIRONMENT FILE .ENV 
@@ -105,6 +107,46 @@ function salve() {
   initKeycloak();
 }
 
+function send(){
+  console.log('function send token');
+
+  let url = window.sessionStorage.getItem('BACKEND_URL')+'/check-token';
+  let eleTextJson = document.getElementById('send-json');
+  let eleTextBase = document.getElementById('send-base64');
+
+  const response = fetch(url, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ token: keycloak.token })
+  }).then(function (response) {
+
+      if(response.ok)
+      {
+        eleTextBase.innerHTML = 'Request Success';
+        events(">> Send Token: Request Success", "text-success");
+      }
+      else
+      {
+        eleTextBase.innerHTML = 'Request Failed';
+        events(">> Send Token: Request Failed", "text-danger");
+      }
+
+      return response.json();
+  })
+  .then(function (json) {
+      console.log(json);
+
+      if (typeof json === 'object') {
+        json = JSON.stringify(json, null, '  ');
+      }
+
+      eleTextJson.innerHTML = json;
+  });
+}
+
 function login(){
   console.log('login func');
   events(">> keycloak Function Login", "text-info");
@@ -159,22 +201,10 @@ function output(option) {
   eleTextBase.innerHTML = token;
 }
 
-async function request() {
-  const url = document.getElementById('url').value;
-  const includeAccessToken = document.getElementById('include_access_token').checked;
-  const result = await fetch(url,  {
-    headers: includeAccessToken ? {
-      'Authorization' : `Bearer ${keycloak.token}`
-    } : undefined
-  });
-  const resultText = await result.text();
-
-  output(`Status: ${result.status} <br/>Content: ${resultText}`);
-}
-
 function initKeycloak() {
   keycloak.init({
-    onLoad: 'check-sso'
+    onLoad: 'check-sso',
+    scope: 'openid'
   }).then(function(authenticated) {
     console.log(authenticated);
     console.log(authenticated ? 'authenticated' : 'not authenticated');
@@ -204,6 +234,7 @@ keycloak.onAuthSuccess = async function () {
   eleButToken.style.display = "block";
   eleButIdToken.style.display = "block";
   eleButRefresh.style.display = "block";
+  eleButSend.style.display = "block";
 
   eleButLogin.style.display = "none";
 };
